@@ -8,7 +8,7 @@ interface JobCardProps {
 export function JobCard({ job }: JobCardProps) {
   return (
     <Link
-      href={job.applicationUrl || `/jobs/${job.id}`}
+      href={`/jobs/${job.id}`}
       className="block group"
     >
       <div className="border border-zinc-200 dark:border-zinc-800 rounded-lg p-6 transition-all hover:border-zinc-300 dark:hover:border-zinc-700 hover:shadow-md">
