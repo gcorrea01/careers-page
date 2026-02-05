@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { MOCK_JOBS } from "@/lib/data";
+import { ApplicationForm } from "@/components/ApplicationForm";
 
 interface JobDetailsPageProps {
   params: Promise<{
@@ -114,12 +115,8 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
           </div>
         )}
 
-        {/* Apply Button */}
-        <div className="bg-white dark:bg-black border border-zinc-200 dark:border-zinc-800 rounded-lg p-8">
-          <button className="w-full bg-zinc-900 dark:bg-zinc-50 text-white dark:text-zinc-900 font-semibold py-4 px-6 rounded-lg hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors">
-            Apply Now
-          </button>
-        </div>
+        {/* Application Form */}
+        <ApplicationForm jobTitle={job.title} />
       </div>
     </div>
   );
