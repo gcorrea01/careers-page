@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, FormEvent } from "react";
+import { supabase } from "@/lib/supabase";
 
 interface ApplicationFormProps {
   jobTitle: string;
@@ -9,16 +10,61 @@ interface ApplicationFormProps {
 export function ApplicationForm({ jobTitle }: ApplicationFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError(null);
     setIsSubmitting(true);
 
-    // Mock API delay
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      // Extract form data
+      const formData = new FormData(e.currentTarget);
+      const fullName = formData.get("fullName") as string;
+      const email = formData.get("email") as string;
+      const linkedin = formData.get("linkedin") as string;
+      const whySunnyHub = formData.get("whySunnyHub") as string;
 
-    setIsSubmitting(false);
-    setIsSuccess(true);
+      // Prepare data for Supabase (matching user's requested column names)
+      const applicationData = {
+        name: fullName.trim(),
+        email: email.trim().toLowerCase(),
+        linkedin: linkedin.trim(),
+        cover_letter: whySunnyHub.trim(),
+        job_title: jobTitle,
+      };
+
+      // Insert into Supabase
+      const { error: supabaseError } = await supabase
+        .from("applications")
+        .insert([applicationData]);
+
+      if (supabaseError) {
+        console.error("Supabase error details:", {
+          message: supabaseError.message,
+          details: supabaseError.details,
+          hint: supabaseError.hint,
+          code: supabaseError.code,
+        });
+
+        // Check for common error types
+        if (supabaseError.code === "42501") {
+          throw new Error("Database permission error. Please contact support.");
+        } else if (supabaseError.message) {
+          throw new Error(`Submission failed: ${supabaseError.message}`);
+        } else {
+          throw new Error("Failed to submit application. Please try again.");
+        }
+      }
+
+      // Success
+      setIsSuccess(true);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "An unexpected error occurred";
+      setError(errorMessage);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (isSuccess) {
@@ -47,6 +93,42 @@ export function ApplicationForm({ jobTitle }: ApplicationFormProps) {
             Thank you for applying to the {jobTitle} position. We'll review your
             application and get back to you soon.
           </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-white dark:bg-black border border-zinc-200 dark:border-zinc-800 rounded-lg p-8 shadow-lg">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg
+              className="w-8 h-8 text-red-600 dark:text-red-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </div>
+          <h3 className="text-2xl font-bold text-red-600 dark:text-red-400 mb-2">
+            Submission Failed
+          </h3>
+          <p className="text-zinc-600 dark:text-zinc-400 mb-6">
+            {error}
+          </p>
+          <button
+            onClick={() => setError(null)}
+            className="bg-zinc-900 dark:bg-zinc-50 text-white dark:text-zinc-900 font-semibold py-3 px-6 rounded-lg hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors"
+          >
+            Try Again
+          </button>
         </div>
       </div>
     );

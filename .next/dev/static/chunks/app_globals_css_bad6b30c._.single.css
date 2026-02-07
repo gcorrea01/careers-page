@@ -29,6 +29,10 @@
 
 @layer theme {
   :root, :host {
+    --color-red-100: #ffe2e2;
+    --color-red-400: #ff6568;
+    --color-red-600: #e40014;
+    --color-red-900: #82181a;
     --color-green-100: #dcfce7;
     --color-green-400: #05df72;
     --color-green-600: #00a544;
@@ -74,6 +78,10 @@
 
   @supports (color: lab(0% 0 0)) {
     :root, :host {
+      --color-red-100: lab(92.243% 10.2865 3.83865);
+      --color-red-400: lab(63.7053% 60.745 31.3109);
+      --color-red-600: lab(48.4493% 77.4328 61.5452);
+      --color-red-900: lab(28.5139% 44.5539 29.0463);
       --color-green-100: lab(96.1861% -13.8464 6.52365);
       --color-green-400: lab(78.503% -64.9265 39.7492);
       --color-green-600: lab(59.0978% -58.6621 41.2579);
@@ -563,6 +571,10 @@
     background-color: var(--color-green-100);
   }
 
+  .bg-red-100 {
+    background-color: var(--color-red-100);
+  }
+
   .bg-white {
     background-color: var(--color-white);
   }
@@ -683,6 +695,10 @@
 
   .text-green-600 {
     color: var(--color-green-600);
+  }
+
+  .text-red-600 {
+    color: var(--color-red-600);
   }
 
   .text-white {
@@ -866,6 +882,18 @@
   }
 
   @media (prefers-color-scheme: dark) {
+    .dark\:bg-red-900\/30 {
+      background-color: #82181a4d;
+    }
+
+    @supports (color: color-mix(in lab, red, red)) {
+      .dark\:bg-red-900\/30 {
+        background-color: color-mix(in oklab, var(--color-red-900) 30%, transparent);
+      }
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
     .dark\:bg-zinc-50 {
       background-color: var(--color-zinc-50);
     }
@@ -892,6 +920,12 @@
   @media (prefers-color-scheme: dark) {
     .dark\:text-green-400 {
       color: var(--color-green-400);
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .dark\:text-red-400 {
+      color: var(--color-red-400);
     }
   }
 
