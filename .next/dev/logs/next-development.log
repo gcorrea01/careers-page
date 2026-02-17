@@ -1,6 +1,2 @@
-[00:00:01.123] Server  LOG     ✓ Ready in 854ms
-[00:00:12.534] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:01:07.022] Browser ERROR   Supabase error: {"code":"42501","details":null,"hint":null,"message":"new row violates row-level security policy for table \"applications\""}
-[00:01:37.857] Browser ERROR   Supabase error: {"code":"42501","details":null,"hint":null,"message":"new row violates row-level security policy for table \"applications\""}
-[00:03:52.457] Server  LOG     ✓ Compiled in 167ms
-[00:06:24.454] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:01.869] Server  LOG     ✓ Ready in 1602ms
+[00:00:15.601] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
